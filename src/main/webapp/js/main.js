@@ -223,7 +223,17 @@ var vista = function(objeto, ContextPath) {
             campos = objeto.getFieldNames();
             datos = objeto.getOne(id);
             $.each(campos, function(index, valor) {
-                $('#' + campos[index]).val(datos[campos[index]]);
+                if (campos[index] == "fecha") {
+                    var date = new Date(datos[campos[index]]);//formateamos en una fecha el dato
+                    //el dia y el año nos pueden dar un solo digito, por lo que añadimos siempre un 0 
+                    //al final, con slice cogemos SOLAMENTE los dos ultimos digitos (ej. 015 -> 15)
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var mounth = ('0' + date.getMonth()+1).slice(-2);
+                    var year = date.getFullYear();
+                    $('#' + campos[index]).val(year+"-"+mounth+"-"+day);
+                } else {
+                    $('#' + campos[index]).val(datos[campos[index]]);
+                }
             });
         },
         getRegistersInfo: function(filter, filteroperator, filtervalue, systemfilter, systemfilteroperator, systemfiltervalue) {
