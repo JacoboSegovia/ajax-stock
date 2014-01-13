@@ -228,7 +228,7 @@ var vista = function(objeto, ContextPath) {
                     //el dia y el año nos pueden dar un solo digito, por lo que añadimos siempre un 0 
                     //al final, con slice cogemos SOLAMENTE los dos ultimos digitos (ej. 015 -> 15)
                     var day = ('0' + date.getDate()).slice(-2);
-                    var mounth = ('0' + date.getMonth()+1).slice(-2);
+                    var mounth = ('0' + date.getMonth()+1).slice(-2);//error, coje el dia ¿?
                     var year = date.getFullYear();
                     $('#' + campos[index]).val(year+"-"+mounth+"-"+day);
                 } else {
