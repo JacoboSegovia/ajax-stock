@@ -43,6 +43,7 @@ var control_compra_list = function(path) {
         pie = '<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Cerrar</button>';
 
         loadForm(place, cabecera, view.getEmptyForm(), pie, false);
+        //
         if (action == "edit") {
             view.doFillForm(id);
         } else {
