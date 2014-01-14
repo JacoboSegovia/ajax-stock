@@ -111,6 +111,7 @@
         <script src="js/util.js" charset="UTF-8"></script>
         <script src="js/main.js" charset="UTF-8"></script>
 
+        <script src="js/control/control.js" charset="UTF-8"></script>
         <script src="js/control/cliente.js" charset="UTF-8"></script>
         <script src="js/control/producto.js" charset="UTF-8"></script>
         <script src="js/control/tipoproducto.js" charset="UTF-8"></script>
