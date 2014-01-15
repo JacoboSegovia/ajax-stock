@@ -9,7 +9,7 @@ function cargaBotoneraMantenimiento(btn) {
         {"class": "btn btn-mini action03", "icon": "icon-pencil", "text": ""},
         {"class": "btn btn-mini action04", "icon": "icon-remove", "text": ""}
     ];
-    if (btn.lenght != 0) {
+    if (btn.length != 0) {
         botonera = btn.concat(botonera);
     }
     return botonera;
@@ -22,7 +22,7 @@ function cargaBotoneraBuscando() {
     return botonera;
 }
 
-function loadDivView(view, place, id) {
+function loadDivView(view, place, id, prefijo_div) {
     $(prefijo_div + place).empty().append((view.getObjectTable(id))
             + '<button class="btn btn-primary" id="limpiar">Limpiar</button>');
     $(prefijo_div + '#limpiar').click(function() {
@@ -152,7 +152,7 @@ function inicia(view, pag, order, ordervalue, rpp, filter, filteroperator, filte
     } else {
         $(prefijo_div + '.btn.btn-mini.action01').unbind('click');
         $(prefijo_div + '.btn.btn-mini.action01').click(function() {
-            loadDivView(view, '#datos2', $(this).attr('id'));
+            loadDivView(view, '#datos2', $(this).attr('id'), prefijo_div);
         });
 
         $(prefijo_div + '.btn.btn-mini.action02').unbind('click');

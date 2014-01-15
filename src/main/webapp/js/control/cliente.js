@@ -27,7 +27,7 @@ var control_cliente_list = function(path) {
 
     return {
         inicia: function(view, pag, order, ordervalue, rpp, filter, filteroperator, filtervalue, callback, systemfilter, systemfilteroperator, systemfiltervalue) {
-            inicia(view, pag, order, ordervalue, rpp, filter, filteroperator, filtervalue, callback, systemfilter, systemfilteroperator, systemfiltervalue, prefijo_div, clase, btn);
+            inicia(view, pag, order, ordervalue, rpp, filter, filteroperator, filtervalue, callback, systemfilter, systemfilteroperator, systemfiltervalue, prefijo_div, clase, btn, prefijo_div);
             if (!callback) {
                 $(prefijo_div + '.btn.btn-mini.action05').unbind('click');
                 $(prefijo_div + '.btn.btn-mini.action05').click(function() {
