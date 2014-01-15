@@ -2,118 +2,120 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-function cargaBotoneraMantenimiento(btn) {
-    var botonera = [
-        {"class": "btn btn-mini action01", "icon": "icon-eye-open", "text": ""},
-        {"class": "btn btn-mini action02", "icon": "icon-zoom-in", "text": ""},
-        {"class": "btn btn-mini action03", "icon": "icon-pencil", "text": ""},
-        {"class": "btn btn-mini action04", "icon": "icon-remove", "text": ""}
-    ];
-    if (btn.length != 0) {
-        botonera = btn.concat(botonera);
-    }
-    return botonera;
-}
-
-function cargaBotoneraBuscando() {
-    var botonera = [
-        {"class": "btn btn-mini action01", "icon": "icon-ok", "text": ""}
-    ];
-    return botonera;
-}
-
-function loadDivView(view, place, id, prefijo_div) {
-    $(prefijo_div + place).empty().append((view.getObjectTable(id))
-            + '<button class="btn btn-primary" id="limpiar">Limpiar</button>');
-    $(prefijo_div + '#limpiar').click(function() {
-        $(prefijo_div + place).empty();
-    });
-}
-
-function loadModalForm(view, place, id, action, clase) {
-    cabecera = '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
-    if (action == "edit") {
-        cabecera += '<h3 id="myModalLabel">Edición de ' + view.getObject().getName() + "</h3>";
-    } else {
-        cabecera += '<h3 id="myModalLabel">Alta de ' + view.getObject().getName() + "</h3>";
-    }
-    pie = '<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Cerrar</button>';
-
-    loadForm(place, cabecera, view.getEmptyForm(), pie, false);
-    if (action == "edit") {
-        view.doFillForm(id);
-    } else {
-        $(prefijo_div + '#id').val('0').attr("disabled", true);
-        //$(prefijo_div + '#nombre').focus();
-    }
-    $(prefijo_div + '#submitForm').unbind('click');
-    $(prefijo_div + '#submitForm').click(function() {
-        enviarDatosUpdateForm(view, id, clase);
-        return false;
-    });
-}
-
-function removeConfirmationModalForm(view, place, id) {
-    cabecera = "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>" +
-            "<h3 id=\"myModalLabel\">Borrado de " + view.getObject().getName() + "</h3>";
-    pie = "<div id=\"result\">¿Seguro que desea borrar el registro?</div>" +
-            '<button id="btnBorrarSi" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Sí</button>' +
-            '<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">No</button>';
-    loadForm(place, cabecera, view.getObjectTable(id), pie, false);
-    $(prefijo_div + '#btnBorrarSi').unbind('click');
-    $(prefijo_div + '#btnBorrarSi').click(function() {
-        resultado = view.getObject().removeOne(id);
-        cabecera = "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>" + "<h3 id=\"myModalLabel\">Respuesta del servidor</h3>";
-        pie = "<button class=\"btn btn-primary\" data-dismiss=\"modal\" aria-hidden=\"true\">Cerrar</button>";
-        loadForm('#modal02', cabecera, "Código: " + resultado["status"] + "<br />" + resultado["message"] + "<br />", pie, true);
-    });
-}
-
-function loadModalView(view, place, id) {
-    cabecera = "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>" +
-            "<h3 id=\"myModalLabel\">Detalle de " + view.getObject().getName() + "</h3>";
-    pie = "<button class=\"btn btn-primary\" data-dismiss=\"modal\" aria-hidden=\"true\">Cerrar</button>";
-    loadForm(place, cabecera, view.getObjectTable(id), pie, true);
-}
-
-function enviarDatosUpdateForm(view, id, clase) {
-    $.fn.serializeObject = function()
-    {
-        // http://jsfiddle.net/davidhong/gP9bh/
-        var o = {};
-        var a = this.serializeArray();
-        $.each(a, function() {
-            if (o[this.name] !== undefined) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = encodeURIComponent(this.value) || '';
-            }
-        });
-        return o;
-    };
-    var jsonObj = [];
-    jsonObj = $(prefijo_div + '#formulario').serializeObject();
-    jsonfile = {json: JSON.stringify(jsonObj)};
-    cabecera = "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>" + "<h3 id=\"myModalLabel\">Respuesta del servidor</h3>";
-    pie = "<button class=\"btn btn-primary\" data-dismiss=\"modal\" aria-hidden=\"true\">Cerrar</button>";
-    resultado = view.getObject().saveOne(jsonfile);
-    if (resultado["status"] = "200") {
-        mensaje = 'valores actualizados correctamente para el ' + clase + ' con id=' + resultado["message"];
-        loadForm('#modal02', cabecera, "Código: " + resultado["status"] + "<br />" + mensaje + "<br />" + view.getObjectTable(resultado["message"]), pie, true);
-    } else {
-        mensaje = 'el servidor ha retornado el mensaje de error=' + resultado["message"];
-        loadForm('#modal02', cabecera, "Código: " + resultado["status"] + "<br />" + mensaje + "<br />" + view.getObjectTable(resultado["message"]), pie, true);
-    }
-
-}
-
-
-
 function inicia(view, pag, order, ordervalue, rpp, filter, filteroperator, filtervalue, callback, systemfilter, systemfilteroperator, systemfiltervalue, prefijo_div, clase, btn) {
     var thisObject = this;
+
+    function cargaBotoneraMantenimiento() {
+        var botonera = [
+            {"class": "btn btn-mini action01", "icon": "icon-eye-open", "text": ""},
+            {"class": "btn btn-mini action02", "icon": "icon-zoom-in", "text": ""},
+            {"class": "btn btn-mini action03", "icon": "icon-pencil", "text": ""},
+            {"class": "btn btn-mini action04", "icon": "icon-remove", "text": ""}
+        ];
+        if (btn.length != 0) {
+            botonera = btn.concat(botonera);
+        }
+        return botonera;
+    }
+
+    function cargaBotoneraBuscando() {
+        var botonera = [
+            {"class": "btn btn-mini action01", "icon": "icon-ok", "text": ""}
+        ];
+        return botonera;
+    }
+
+    function loadDivView(view, place, id) {
+        $(prefijo_div + place).empty().append((view.getObjectTable(id))
+                + '<button class="btn btn-primary" id="limpiar">Limpiar</button>');
+        $(prefijo_div + '#limpiar').click(function() {
+            $(prefijo_div + place).empty();
+        });
+    }
+
+    function loadModalForm(view, place, id, action, clase) {
+        cabecera = '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
+        if (action == "edit") {
+            cabecera += '<h3 id="myModalLabel">Edición de ' + view.getObject().getName() + "</h3>";
+        } else {
+            cabecera += '<h3 id="myModalLabel">Alta de ' + view.getObject().getName() + "</h3>";
+        }
+        pie = '<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Cerrar</button>';
+
+        loadForm(place, cabecera, view.getEmptyForm(), pie, false);
+        if (action == "edit") {
+            view.doFillForm(id);
+        } else {
+            $(prefijo_div + '#id').val('0').attr("disabled", true);
+            //$(prefijo_div + '#nombre').focus();
+        }
+        $(prefijo_div + '#submitForm').unbind('click');
+        $(prefijo_div + '#submitForm').click(function() {
+            enviarDatosUpdateForm(view, id, clase);
+            return false;
+        });
+    }
+
+    function removeConfirmationModalForm(view, place, id) {
+        cabecera = "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>" +
+                "<h3 id=\"myModalLabel\">Borrado de " + view.getObject().getName() + "</h3>";
+        pie = "<div id=\"result\">¿Seguro que desea borrar el registro?</div>" +
+                '<button id="btnBorrarSi" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Sí</button>' +
+                '<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">No</button>';
+        loadForm(place, cabecera, view.getObjectTable(id), pie, false);
+        $(prefijo_div + '#btnBorrarSi').unbind('click');
+        $(prefijo_div + '#btnBorrarSi').click(function() {
+            resultado = view.getObject().removeOne(id);
+            cabecera = "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>" + "<h3 id=\"myModalLabel\">Respuesta del servidor</h3>";
+            pie = "<button class=\"btn btn-primary\" data-dismiss=\"modal\" aria-hidden=\"true\">Cerrar</button>";
+            loadForm('#modal02', cabecera, "Código: " + resultado["status"] + "<br />" + resultado["message"] + "<br />", pie, true);
+        });
+    }
+
+    function loadModalView(view, place, id) {
+        cabecera = "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>" +
+                "<h3 id=\"myModalLabel\">Detalle de " + view.getObject().getName() + "</h3>";
+        pie = "<button class=\"btn btn-primary\" data-dismiss=\"modal\" aria-hidden=\"true\">Cerrar</button>";
+        loadForm(place, cabecera, view.getObjectTable(id), pie, true);
+    }
+
+    function enviarDatosUpdateForm(view, id, clase) {
+        $.fn.serializeObject = function()
+        {
+            // http://jsfiddle.net/davidhong/gP9bh/
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = encodeURIComponent(this.value) || '';
+                }
+            });
+            return o;
+        };
+        var jsonObj = [];
+        jsonObj = $(prefijo_div + '#formulario').serializeObject();
+        jsonfile = {json: JSON.stringify(jsonObj)};
+        cabecera = "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>" + "<h3 id=\"myModalLabel\">Respuesta del servidor</h3>";
+        pie = "<button class=\"btn btn-primary\" data-dismiss=\"modal\" aria-hidden=\"true\">Cerrar</button>";
+        resultado = view.getObject().saveOne(jsonfile);
+        if (resultado["status"] = "200") {
+            mensaje = 'valores actualizados correctamente para el ' + clase + ' con id=' + resultado["message"];
+            loadForm('#modal02', cabecera, "Código: " + resultado["status"] + "<br />" + mensaje + "<br />" + view.getObjectTable(resultado["message"]), pie, true);
+        } else {
+            mensaje = 'el servidor ha retornado el mensaje de error=' + resultado["message"];
+            loadForm('#modal02', cabecera, "Código: " + resultado["status"] + "<br />" + mensaje + "<br />" + view.getObjectTable(resultado["message"]), pie, true);
+        }
+
+    }
+
+
+
+
 
     //controlar que no estemos en una página fuera de órbita
 
@@ -130,7 +132,7 @@ function inicia(view, pag, order, ordervalue, rpp, filter, filteroperator, filte
     if (callback) {
         $(prefijo_div + "#datos").empty().append(view.getLoading()).html(view.getPageTable(pag, order, ordervalue, rpp, filter, filteroperator, filtervalue, systemfilter, systemfilteroperator, systemfiltervalue, cargaBotoneraBuscando()));
     } else {
-        $(prefijo_div + "#datos").empty().append(view.getLoading()).html(view.getPageTable(pag, order, ordervalue, rpp, filter, filteroperator, filtervalue, systemfilter, systemfilteroperator, systemfiltervalue, cargaBotoneraMantenimiento(btn)));
+        $(prefijo_div + "#datos").empty().append(view.getLoading()).html(view.getPageTable(pag, order, ordervalue, rpp, filter, filteroperator, filtervalue, systemfilter, systemfilteroperator, systemfiltervalue, cargaBotoneraMantenimiento()));
     }
 
     //muestra la frase con el número de registros de la consulta
@@ -152,7 +154,7 @@ function inicia(view, pag, order, ordervalue, rpp, filter, filteroperator, filte
     } else {
         $(prefijo_div + '.btn.btn-mini.action01').unbind('click');
         $(prefijo_div + '.btn.btn-mini.action01').click(function() {
-            loadDivView(view, '#datos2', $(this).attr('id'), prefijo_div);
+            loadDivView(view, '#datos2', $(this).attr('id'));
         });
 
         $(prefijo_div + '.btn.btn-mini.action02').unbind('click');
